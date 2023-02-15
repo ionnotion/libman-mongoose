@@ -1,39 +1,35 @@
-const User = require("../models/user")
-
+const User = require("../models/user");
+const bcrypt = require("bcrypt")
 class UserController {
+	static async register(req, res, next) {
+		const { username, email, password, firstName, lastName } = req.body;
+        const {isAdmin} = req?.user
+        isAdmin ? isAdmin : isAdmin = false
+		try {
+            const newUser = new User({username,email,password,firstName,lastName,isAdmin})
+            await newUser.save()
 
-    static async register(req,res,next) {
-        try {
-            
-        } catch (error) {
-            next(error)
-        }
-    }
+            let returning = {
+                username : newUser.username,
+                email : newUser.email
+            }
 
-    static async login(req,res,next) {
-        try {
-            
-        } catch (error) {
-            next(error)
-        }
-    }
+            res.status(200).json({returning})
+		} catch (error) {
+			next(error);
+		}
+	}
 
-    static async getAll(req,res,next) {
-        try {
-            
-        } catch (error) {
-            next(error)
-        }
-    }
+	static async login(req, res, next) {
+        const {username, password} = req.body
+		try {
+            const foundUser = User.findOne({username})
 
-    static async getOne(req,res,next) {
-        const {id} = req.params
-        try {
-            
-        } catch (error) {
-            next(error)
-        }
-    }
+            res.status(200).json({foundUser})
+		} catch (error) {
+			next(error);
+		}
+	}
 }
 
-module.exports = UserController
+module.exports = UserController;

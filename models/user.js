@@ -40,7 +40,7 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-const Author = mongoose.model("Author", AuthorSchema);
+const User = mongoose.model("User", UserSchema);
 
 UserSchema.pre("save", async function (next) {
     let {password} = this
@@ -48,4 +48,4 @@ UserSchema.pre("save", async function (next) {
     next()
 })
 
-module.exports = Author;
+module.exports = User;
