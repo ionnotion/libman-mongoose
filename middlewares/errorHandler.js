@@ -1,17 +1,18 @@
 const errorHandler = (error, req, res, next) => {
 	console.log(error);
+    console.log(error.name)
 	let code;
 	let message;
 
 	switch (error.name) {
-		case `SequelizeValidationError`:
-		case `SequelizeUniqueConstraintError`:
+		case `MongoServerError`:
+		// case `SequelizeUniqueConstraintError`:
 			code = 400;
-			message = error.errors.map((el) => el.message);
+			message = `${Object.keys(error.keyValue).join(" ,")} is already taken.`;
 			break;
-		//ini belum dipake
-		case `BAD_TRANSACTION_REQUEST`:
-		case `BAD_PATCH_REQUEST`:
+		// case `BAD_TRANSACTION_REQUEST`:
+		case `BAD_REQUEST`:
+		case `ValidationError`:
 			code = 400;
 			message = error.message;
 			break;

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const bcrypt =require("bcrypt");
 const {default : validator} = require("validator");
+const { hashPassword } = require("../helpers/bcrypt");
 
 const UserSchema = new mongoose.Schema({
 	username: {
@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
 		required: [true, "Username is Required"],
         min: [4, "Username must be longer than 4 characters"],
         max: [16, "Username must be less than 16 character"],
-        validate : [validator.isEmpty, "Username is Required"],
+        validate : [validator.isAlphanumeric, "Username is Required"],
         unique: true,
 	},
 	email: {
@@ -21,18 +21,18 @@ const UserSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		required: [true, "Password is Required"],
-        validate : [validator.isEmpty, "Password is Required"],
+        validate : [validator.isAscii, "Password is Required"],
 
 	},
 	firstName: {
 		type: String,
 		required: [true, "First Name is Required"],
-        validate : [validator.isEmpty, "First Name is Required"],
+        validate : [validator.isAlpha, "First Name is Required"],
 	},
 	lastName: {
 		type: String,
 		required: [true, "Last Name is Required"],
-        validate : [validator.isEmpty, "Last Name is Required"],
+        validate : [validator.isAlpha, "Last Name is Required"],
 	},
     isAdmin : {
         type: Boolean,
@@ -44,7 +44,8 @@ const User = mongoose.model("User", UserSchema);
 
 UserSchema.pre("save", async function (next) {
     let {password} = this
-    password = bcrypt.hashSync(password)
+    password = hashPassword(password)
+    console.log(password)
     next()
 })
 

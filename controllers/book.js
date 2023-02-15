@@ -1,51 +1,141 @@
-const Book = require("../models/book")
+const Book = require("../models/book");
+const User = require("../models/user");
 
 class BookController {
+	static async getAll(req, res, next) {
+		try {
+			const books = await Book.find().populate(["author", "category"]);
 
-    static async getAll(req,res,next) {
-        try {
-            
-        } catch (error) {
-            next(error)
-        }
-    }
+			res.status(200).json(books);
+		} catch (error) {
+			next(error);
+		}
+	}
 
-    static async getOne(req,res,next) {
-        const {id} = req.params
-        try {
-            
-        } catch (error) {
-            next(error)
-        }
-    }
+	static async getOne(req, res, next) {
+		const { id } = req.params;
+		try {
+			const book = await Book.findById(id).populate([
+				"author",
+				"category",
+				"borrowedBy",
+			]);
 
-    static async post(req,res,next) {
-        const {id} = req.params
-        const {name} = req.body
-        try {
-            
-        } catch (error) {
-            next(error)
-        }
-    }
+			res.status(200).json(book);
+		} catch (error) {
+			next(error);
+		}
+	}
 
-    static async update(req,res,next) {
-        const {id} = req.params
-        try {
-            
-        } catch (error) {
-            next(error)
-        }
-    }
+	static async post(req, res, next) {
+		const {
+			title,
+			author_id: author,
+			summary,
+			category_id: category,
+			amount,
+		} = req.body;
+		try {
+			const newBook = new Book({title, author, summary, category, amount});
 
-    static async delete(req,res,next) {
-        const {id} = req.params
-        try {
+			await newBook.save();
+
+			res.status(201).json(newBook);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	static async update(req, res, next) {
+		const { id } = req.params;
+		const {
+			title,
+			author_id: author,
+			summary,
+			category_id: category,
+			amount,
+		} = req.body;
+		try {
+			const foundBook = await Book.findById(id).populate("borrowedBy");
+			if (amount < foundBook.available) {
+				throw { name: "BAD_REQUEST", message: "Invalid book amount" };
+			}
+			const updatedBook = await Book.findByIdAndUpdate(id, {
+				title,
+				author,
+				summary,
+				category,
+				amount,
+			});
+
+			res.status(200).json(updatedBook);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	static async checkout(req, res, next) {
+		const { id } = req.params;
+		const { id: user_id } = req.body;
+		try {
+            const foundUser =  await User.findById(user_id)
+
+            if(!foundUser) {
+                throw {name:"USER_NOT_FOUND", message: "User not found..."}
+            }
             
-        } catch (error) {
-            next(error)
-        }
-    }
+			const foundBook = await Book.findById(id).populate("borrowedBy");
+
+            if(!foundBook) {
+                throw {name:"BOOK_NOT_FOUND", message: "Book not found..."}
+            }
+
+            await Book.findByIdAndUpdate(id,{borrowedBy : [...foundBook.borrowedBy,user_id]})
+            
+            const updatedBook = await Book.findById(id)
+
+            res.status(200).json(updatedBook)
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	static async return(req, res, next) {
+		const { id } = req.params;
+		const { id: user_id } = req.body;
+		try {
+            const foundUser =  await User.findById(user_id)
+
+            if(!foundUser) {
+                throw {name:"USER_NOT_FOUND", message: "User not found..."}
+            }
+            
+            const foundBook = await Book.findById(id).populate("borrowedBy");
+
+            if(!foundBook) {
+                throw {name:"BOOK_NOT_FOUND", message: "Book not found..."}
+            }
+
+            await Book.findByIdAndUpdate(id,{borrowedBy : [...foundBook.borrowedBy.filter(e => e == user_id)]})
+
+            const updatedBook = await Book.findById(id)
+
+            res.status(200).json(updatedBook)
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	static async delete(req, res, next) {
+		const { id } = req.params;
+		try {
+            await Book.deleteOne({id})
+
+            res.status(200).json({message: "Delete Book successful"})
+		} catch (error) {
+			next(error);
+		}
+	}
 }
 
-module.exports = BookController
+module.exports = BookController;

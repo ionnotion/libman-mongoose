@@ -1,19 +1,17 @@
+const BookController = require("../controllers/book");
+
 const bookRouter = require("express"). Router();
 
-bookRouter.get("/",(req,res)=> {
-    res.status("get todos")
-});
-bookRouter.post("/",(req,res)=> {
-    res.status("post todos")
-});
-bookRouter.put("/:todoId",(req,res)=> {
-    res.status("put todos")
-});
-bookRouter.patch("/:todoId",(req,res)=> {
-    res.status("patch todos")
-});
-bookRouter.delete("/:todoId",(req,res)=> {
-    res.status("delete todos")
-});
+bookRouter.get("/",BookController.getAll);
+bookRouter.get("/:id",BookController.getOne);
+
+bookRouter.post("/",BookController.post);
+
+bookRouter.put("/:id",BookController.update);
+
+bookRouter.patch("/checkout/:id",BookController.checkout);
+bookRouter.patch("/return/:id",BookController.return);
+
+bookRouter.delete("/:id",BookController.delete);
 
 module.exports = bookRouter;
