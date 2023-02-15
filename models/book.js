@@ -11,7 +11,7 @@ const BookSchema = new mongoose.Schema(
 			ref: "Author",
 			required: true,
 		},
-		description: {
+		summary: {
 			type: String,
 			required: true,
 		},
@@ -23,7 +23,10 @@ const BookSchema = new mongoose.Schema(
 		amount: {
 			type: Number,
 		},
-		borrowedBy: [{ type: String }],
+		borrowedBy: [{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "User",
+		}],
 	},
 	{
 		virtuals: {

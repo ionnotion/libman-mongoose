@@ -1,5 +1,4 @@
-const { Router } = require("express");
-const bookRouter = Router();
+const bookRouter = require("express"). Router();
 
 bookRouter.get("/",(req,res)=> {
     res.status("get todos")
