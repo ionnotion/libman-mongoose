@@ -1,5 +1,5 @@
 const CategoryController = require("../controllers/category");
-const authorization = require("../middlewares/auhtorization");
+const authorization = require("../middlewares/authorization");
 
 const categoryRouter = require("express"). Router();
 

@@ -6,7 +6,7 @@ class CategoryController {
         try {
             const categories = await Category.find()
 
-            res.status(200).json({categories})
+            res.status(200).json(categories)
         } catch (error) {
             next(error)
         }
@@ -17,7 +17,7 @@ class CategoryController {
         try {
             const category = await Category.findById(id)
 
-            res.status(200).json({category})
+            res.status(200).json(category)
         } catch (error) {
             next(error)
         }
@@ -29,7 +29,7 @@ class CategoryController {
             const newCategory = new Category({name})
             await newCategory.save()
 
-            res.status(201).json({newCategory})
+            res.status(201).json(newCategory)
         } catch (error) {
             next(error)
         }
@@ -41,7 +41,7 @@ class CategoryController {
         try {
             const updatedCategory = await Category.findByIdAndUpdate(id,{name})
 
-            res.status(200).json({updatedCategory})
+            res.status(200).json(updatedCategory)
         } catch (error) {
             next(error)
         }

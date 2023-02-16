@@ -35,9 +35,9 @@ class BookController {
 	static async post(req, res, next) {
 		const {
 			title,
-			author_id: author,
+			author,
 			summary,
-			category_id: category,
+			category,
 			amount,
 		} = req.body;
 		try {
@@ -55,9 +55,9 @@ class BookController {
 		const { id } = req.params;
 		const {
 			title,
-			author_id: author,
+			author,
 			summary,
-			category_id: category,
+			category,
 			amount,
 		} = req.body;
 		try {

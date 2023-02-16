@@ -1,12 +1,10 @@
 const errorHandler = (error, req, res, next) => {
-	console.log(error);
-    console.log(error.name)
 	let code;
 	let message;
 
 	switch (error.name) {
 		case `MongoServerError`:
-		// case `SequelizeUniqueConstraintError`:
+			// case `SequelizeUniqueConstraintError`:
 			code = 400;
 			message = `${Object.keys(error.keyValue).join(" ,")} is already taken.`;
 			break;
@@ -28,13 +26,14 @@ const errorHandler = (error, req, res, next) => {
 			code = 401;
 			message = "Invalid Email or password!";
 			break;
-		case `Forbidden`:
-			code = 403
-			message = "Forbidden"
+		case `FORBIDDEN`:
+			code = 403;
+			message = "Forbidden";
+			break;
 		case `Not Found`:
-		code = 404;
-		message = "Data not found";
-		break;
+			code = 404;
+			message = "Data not found";
+			break;
 		default:
 			code = 500;
 			message = "Internal Server Error!";

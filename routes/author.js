@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const AuthorController = require("../controllers/author");
-const authorization = require("../middlewares/auhtorization");
+const authorization = require("../middlewares/authorization");
 
 const authorRouter = require("express").Router();
 

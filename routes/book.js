@@ -1,5 +1,5 @@
 const BookController = require("../controllers/book");
-const authorization = require("../middlewares/auhtorization");
+const authorization = require("../middlewares/authorization");
 
 const bookRouter = require("express"). Router();
 

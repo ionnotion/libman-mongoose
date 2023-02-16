@@ -6,7 +6,7 @@ class AuthorController {
         try {
             const authors = await Author.find()
 
-            res.status(200).json({authors})
+            res.status(200).json(authors)
         } catch (error) {
             next(error)
         }
@@ -17,7 +17,7 @@ class AuthorController {
         try {
             const author = await Author.findById(id)
 
-            res.status(200).json({author})
+            res.status(200).json(author)
         } catch (error) {
             next(error)
         }
@@ -29,7 +29,7 @@ class AuthorController {
             const newAuthor = new Author({name})
             await newAuthor.save()
 
-            res.status(201).json({newAuthor})
+            res.status(201).json(newAuthor)
         } catch (error) {
             next(error)
         }
@@ -41,7 +41,7 @@ class AuthorController {
         try {
             const updatedAuthor = await Author.findByIdAndUpdate(id,{name})
 
-            res.status(200).json({updatedAuthor})
+            res.status(200).json(updatedAuthor)
         } catch (error) {
             next(error)
         }

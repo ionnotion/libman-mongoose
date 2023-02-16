@@ -63,7 +63,9 @@ class UserController {
 
 			const access_token = signToken(payload);
 
-			res.status(200).json({ username: foundUser.username, access_token });
+			console.log(foundUser)
+
+			res.status(200).json({ username: foundUser.username, access_token, isAdmin: foundUser.isAdmin });
 		} catch (error) {
 			next(error);
 		}
