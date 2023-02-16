@@ -6,7 +6,7 @@ const categoryRouter = require("express"). Router();
 categoryRouter.get("/", CategoryController.getAll);
 categoryRouter.get("/:id", CategoryController.getOne);
 
-authorRouter.use(authorization)
+categoryRouter.use(authorization)
 
 categoryRouter.post("/", CategoryController.post);
 categoryRouter.put("/:id", CategoryController.update);

@@ -11,7 +11,8 @@ mongoose.set("strictQuery", true)
 
 async function mongooseConnect() {
     mongoose.connect(url, options).then(()=>{
-        console.log("Connected to mongoose!")
+        let connection = process.env.ATLAS_URL ? "cloud" : "localhost"
+        console.log(`Connected to mongoose! (${connection})`)
     })
 }
 
