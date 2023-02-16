@@ -1,0 +1,85 @@
+{
+	"author": [
+		{ "name": "J.K. Rowling" },
+		{ "name": "J.R.R. Tolkien" },
+		{ "name": "George R.R. Martin" },
+		{ "name": "H.P. Lovecraft" },
+		{ "name": "Sir Arthur Conan Doyle" },
+		{ "name": "Agatha Christie" },
+		{ "name": "Charles Dickens" }
+	],
+	"category": [
+		{ "name": "Adventure stories" },
+		{ "name": "Classics" },
+		{ "name": "Crime" },
+		{ "name": "Fairy tales, fables, and folk tales" },
+		{ "name": "Fantasy" },
+		{ "name": "Historical fiction" },
+		{ "name": "Horror" },
+		{ "name": "Humour and satire" },
+		{ "name": "Literary fiction" },
+		{ "name": "Mystery" },
+		{ "name": "Poetry" },
+		{ "name": "Plays" },
+		{ "name": "Romance" },
+		{ "name": "Science fiction" },
+		{ "name": "Romance" },
+		{ "name": "Short stories" },
+		{ "name": "Thrillers" },
+		{ "name": "War" },
+		{ "name": "Womens fiction" },
+		{ "name": "Young adult" },
+		{ "name": "War" },
+		{ "name": "Non-fiction" },
+		{ "name": "Autobiography and memoir" },
+		{ "name": "Biography" },
+		{ "name": "Essays" },
+		{ "name": "Non-fiction novel" },
+		{ "name": "Self-help" }
+	],
+	"user": [
+		{
+			"username": "admin1234",
+			"password": "admin1234",
+			"email": "admin@admin.com",
+			"firstName": "Admin",
+			"lastName": "First",
+			"isAdmin": true
+		},
+		{
+			"username": "user1234",
+			"password": "user1234",
+			"email": "user@user.com",
+			"firstName": "User",
+			"lastName": "Second",
+			"isAdmin": false
+		}
+	],
+	"book": [
+		{
+			"title": "The Shadow Over Innsmouth",
+			"summary": "A student conducting an antiquarian tour of New England. He travels through the nearby decrepit seaport of Innsmouth which is suggested as a cheaper and potentially interesting next leg of his journey. There he interacts with strange people and observes disturbing events that ultimately lead to horrifying and personal revelations.",
+			"amount": 25
+		},
+		{
+			"title": "The Colour Out of Space",
+			"summary": "An unnamed narrator pieces together the story of an area known by the locals as the blasted heath in the hills west of the fictional town of Arkham, Massachusetts. The narrator discovers that many years ago a meteorite crashed there, poisoning every living being nearby; vegetation grows large but foul-tasting, animals are driven mad and deformed into grotesque shapes, and the people go insane or die one by one.",
+			"amount": 20
+		},
+		{
+			"title": "The Call of Ctulhu",
+			"summary": "The story came from one of Lovecraft's own dreams he had in 1919, which he described briefly in two different letters sent to his friend Rheinhart Kleiner on May 21 and December 14, 1920. In the dream, Lovecraft is visiting an antiquity museum in Providence, attempting to convince the aged curator there to buy an odd bas-relief Lovecraft himself had sculpted.",
+			"amount": 15
+		},
+		{
+			"title": "A Tale Of Two Cities",
+			"summary": "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair, we had everything before us, we had nothing before us, we were all going direct to Heaven, we were all going direct the other way—in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only.",
+			"amount": 10
+		},
+		{
+			"title": "The Hobbit",
+			"summary": "The Hobbit is set within Tolkien's fictional universe and follows the quest of home-loving Bilbo Baggins, the titular hobbit, to win a share of the treasure guarded by a dragon named Smaug. Bilbo's journey takes him from his light-hearted, rural surroundings into more sinister territory.",
+			"amount": 15
+		}
+	]
+}

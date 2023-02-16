@@ -11,6 +11,7 @@ const errorHandler = (error, req, res, next) => {
 		// case `BAD_TRANSACTION_REQUEST`:
 		case `BAD_REQUEST`:
 		case `ValidationError`:
+		case `CastError`:
 			code = 400;
 			message = error.message;
 			break;
@@ -31,6 +32,8 @@ const errorHandler = (error, req, res, next) => {
 			message = "Forbidden";
 			break;
 		case `Not Found`:
+		case `USER_NOT_FOUND`:
+		case `BOOK_NOT_FOUND`:
 			code = 404;
 			message = "Data not found";
 			break;

@@ -9,7 +9,7 @@ class BookController {
 
 			res.status(200).json(books);
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 			next(error);
 		}
 	}
@@ -30,15 +30,16 @@ class BookController {
 	}
 
 	static async post(req, res, next) {
-		const {
-			title,
-			author,
-			summary,
-			category,
-			amount,
-		} = req.body;
+		const { title, author_id, summary, category_id, amount } = req.body;
 		try {
-			const newBook = new Book({title, author, summary, category, amount});
+			console.log(req.body, "<<<<<<<<<");
+			const newBook = new Book({
+				title,
+				author: author_id,
+				summary,
+				category: category_id,
+				amount,
+			});
 
 			await newBook.save();
 
@@ -50,23 +51,26 @@ class BookController {
 
 	static async update(req, res, next) {
 		const { id } = req.params;
-		const {
-			title,
-			author,
-			summary,
-			category,
-			amount,
-		} = req.body;
+		const { title, author_id, summary, category_id, amount } = req.body;
 		try {
-			const foundBook = await Book.findById(id).populate("borrowedBy");
+			const foundBook = await Book.findById(id);
 			if (amount < foundBook.available) {
 				throw { name: "BAD_REQUEST", message: "Invalid book amount" };
 			}
+
+			const validate = new Book({
+				title,
+				author : author_id,
+				summary,
+				category : category_id,
+				amount,
+			})
+
 			const updatedBook = await Book.findByIdAndUpdate(id, {
 				title,
-				author,
+				author : author_id,
 				summary,
-				category,
+				category : category_id,
 				amount,
 			});
 
@@ -80,30 +84,44 @@ class BookController {
 		const { id } = req.params;
 		const { id: user_id } = req.body;
 		try {
-            const foundUser =  await User.findById(user_id)
+			const foundUser = await User.findById(user_id);
 
-            if(!foundUser) {
-                throw {name:"USER_NOT_FOUND", message: "User not found..."}
-            }
-            
+			console.log("here")
+
+			if (!foundUser) {
+				throw { name: "USER_NOT_FOUND", message: "User not found..." };
+			}
+
 			const foundBook = await Book.findById(id).populate("checkouts");
 
-            if(!foundBook) {
-                throw {name:"BOOK_NOT_FOUND", message: "Book not found..."}
-            }
+			if (!foundBook) {
+				throw { name: "BOOK_NOT_FOUND", message: "Book not found..." };
+			}
 
-			let checkoutDate = new Date()
-			let dueDate = new Date().setDate(checkoutDate.getDate() + 7)
-			
-			let newCheckout = new Checkout({username:foundUser.username, user : foundUser._id, checkoutDate, dueDate })
-			await newCheckout.save()
+			if(foundBook.checkouts.length >= foundBook.amount) {
+				throw { name : "BAD_REQUEST", message: "Insufficient stock"}
+			}
 
-            await Book.findByIdAndUpdate(id,{checkouts : [...foundBook.checkouts, newCheckout ]})
-            
-            const updatedBook = await Book.findById(id)
+			let checkoutDate = new Date();
+			let dueDate = new Date().setDate(checkoutDate.getDate() + 7);
 
-            res.status(200).json(updatedBook)
+			let newCheckout = new Checkout({
+				username: foundUser.username,
+				user: foundUser._id,
+				checkoutDate,
+				dueDate,
+			});
+			await newCheckout.save();
+
+			await Book.findByIdAndUpdate(id, {
+				checkouts: [...foundBook.checkouts, newCheckout],
+			});
+
+			const updatedBook = await Book.findById(id);
+
+			res.status(200).json(updatedBook);
 		} catch (error) {
+			console.log(error.name)
 			next(error);
 		}
 	}
@@ -111,18 +129,20 @@ class BookController {
 	static async return(req, res, next) {
 		const { id } = req.params;
 		const { id: checkout_id } = req.body;
-		try {            
-            const foundBook = await Book.findById(id).populate("checkouts");
+		try {
+			const foundBook = await Book.findById(id).populate("checkouts");
 
-            if(!foundBook) {
-                throw {name:"BOOK_NOT_FOUND", message: "Book not found..."}
-            }
+			if (!foundBook) {
+				throw { name: "BOOK_NOT_FOUND", message: "Book not found..." };
+			}
 
-            await Book.findByIdAndUpdate(id,{checkouts : [...foundBook.checkouts.filter(e => e._id != checkout_id)]})
+			await Book.findByIdAndUpdate(id, {
+				checkouts: [...foundBook.checkouts.filter((e) => e._id != checkout_id)],
+			});
 
-            const updatedBook = await Book.findById(id)
+			const updatedBook = await Book.findById(id);
 
-            res.status(200).json(updatedBook)
+			res.status(200).json(updatedBook);
 		} catch (error) {
 			next(error);
 		}
@@ -131,9 +151,9 @@ class BookController {
 	static async delete(req, res, next) {
 		const { id } = req.params;
 		try {
-            await Book.deleteOne({id})
+			await Book.deleteOne({ id });
 
-            res.status(200).json({message: "Delete Book successful"})
+			res.status(200).json({ message: "Delete Book successful" });
 		} catch (error) {
 			next(error);
 		}
