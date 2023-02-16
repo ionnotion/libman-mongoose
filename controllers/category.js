@@ -39,6 +39,7 @@ class CategoryController {
         const {id} = req.params
         const {name} = req.body
         try {
+            console.log("here","<<<<<<<<<<<<<<<")
             const updatedCategory = await Category.findByIdAndUpdate(id,{name})
 
             res.status(200).json(updatedCategory)

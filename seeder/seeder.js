@@ -5,6 +5,8 @@ const User = require("../models/user");
 const { default: mongoose } = require("mongoose");
 const mongooseConnect = require("../config/mongoose");
 const fs = require("fs");
+const { hashPassword } = require("../helpers/bcrypt");
+
 async function startSeed() {
 	await mongooseConnect();
 
@@ -19,6 +21,11 @@ async function startSeed() {
 
 	await Author.insertMany(author);
 	await Category.insertMany(category);
+
+    user.forEach(el=>{
+        el.password = hashPassword(el.password)
+    })
+
 	await User.insertMany(user);
 
 	const authors = await Author.find();
