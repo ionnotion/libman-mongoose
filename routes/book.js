@@ -1,9 +1,12 @@
 const BookController = require("../controllers/book");
+const authorization = require("../middlewares/auhtorization");
 
 const bookRouter = require("express"). Router();
 
 bookRouter.get("/",BookController.getAll);
 bookRouter.get("/:id",BookController.getOne);
+
+bookRouter.use(authorization)
 
 bookRouter.post("/",BookController.post);
 

@@ -4,8 +4,13 @@ const User = require("../models/user");
 class BookController {
 	static async getAll(req, res, next) {
 		try {
-			const books = await Book.find().populate(["author", "category"]);
-
+			let books = await Book.find().populate(["author", "category"]);
+			books = books.map(el => {
+				el.remaining = el.available
+				console.log(el)
+				return el
+			})
+			console.log(books)
 			res.status(200).json(books);
 		} catch (error) {
 			next(error);

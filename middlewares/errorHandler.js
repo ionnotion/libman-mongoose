@@ -28,10 +28,13 @@ const errorHandler = (error, req, res, next) => {
 			code = 401;
 			message = "Invalid Email or password!";
 			break;
-		// case `Not Found`:
-		// code = 404;
-		// message = "Data not found";
-		// break;
+		case `Forbidden`:
+			code = 403
+			message = "Forbidden"
+		case `Not Found`:
+		code = 404;
+		message = "Data not found";
+		break;
 		default:
 			code = 500;
 			message = "Internal Server Error!";
