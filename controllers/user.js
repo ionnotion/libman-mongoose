@@ -6,8 +6,12 @@ const { default: validator } = require("validator");
 class UserController {
 	static async register(req, res, next) {
 		let { username, email, password, firstName, lastName } = req.body;
-		let { isAdmin } = req?.user;
-		isAdmin ? isAdmin : (isAdmin = false);
+		let isAdmin
+		if (!req.user) {
+			isAdmin = false
+		} else {
+			isAdmin = req.user.isAdmin
+		}
 		try {
 			password = hashPassword(password);
 			const newUser = new User({

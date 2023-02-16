@@ -1,18 +1,15 @@
 const Book = require("../models/book");
+const Checkout = require("../models/checkout");
 const User = require("../models/user");
 
 class BookController {
 	static async getAll(req, res, next) {
 		try {
 			let books = await Book.find().populate(["author", "category"]);
-			books = books.map(el => {
-				el.remaining = el.available
-				console.log(el)
-				return el
-			})
-			console.log(books)
+
 			res.status(200).json(books);
 		} catch (error) {
+			console.log(error)
 			next(error);
 		}
 	}
@@ -23,7 +20,7 @@ class BookController {
 			const book = await Book.findById(id).populate([
 				"author",
 				"category",
-				"borrowedBy",
+				"checkouts",
 			]);
 
 			res.status(200).json(book);
@@ -89,13 +86,19 @@ class BookController {
                 throw {name:"USER_NOT_FOUND", message: "User not found..."}
             }
             
-			const foundBook = await Book.findById(id).populate("borrowedBy");
+			const foundBook = await Book.findById(id).populate("checkouts");
 
             if(!foundBook) {
                 throw {name:"BOOK_NOT_FOUND", message: "Book not found..."}
             }
 
-            await Book.findByIdAndUpdate(id,{borrowedBy : [...foundBook.borrowedBy,user_id]})
+			let checkoutDate = new Date()
+			let dueDate = new Date().setDate(checkoutDate.getDate() + 7)
+			
+			let newCheckout = new Checkout({username:foundUser.username, user : foundUser._id, checkoutDate, dueDate })
+			await newCheckout.save()
+
+            await Book.findByIdAndUpdate(id,{checkouts : [...foundBook.checkouts, newCheckout ]})
             
             const updatedBook = await Book.findById(id)
 
@@ -107,21 +110,15 @@ class BookController {
 
 	static async return(req, res, next) {
 		const { id } = req.params;
-		const { id: user_id } = req.body;
-		try {
-            const foundUser =  await User.findById(user_id)
-
-            if(!foundUser) {
-                throw {name:"USER_NOT_FOUND", message: "User not found..."}
-            }
-            
-            const foundBook = await Book.findById(id).populate("borrowedBy");
+		const { id: checkout_id } = req.body;
+		try {            
+            const foundBook = await Book.findById(id).populate("checkouts");
 
             if(!foundBook) {
                 throw {name:"BOOK_NOT_FOUND", message: "Book not found..."}
             }
 
-            await Book.findByIdAndUpdate(id,{borrowedBy : [...foundBook.borrowedBy.filter(e => e == user_id)]})
+            await Book.findByIdAndUpdate(id,{checkouts : [...foundBook.checkouts.filter(e => e._id != checkout_id)]})
 
             const updatedBook = await Book.findById(id)
 

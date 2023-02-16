@@ -23,19 +23,10 @@ const BookSchema = new mongoose.Schema(
 		amount: {
 			type: Number,
 		},
-		borrowedBy: [{
+		checkouts: [{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
+			ref: "Checkout",
 		}],
-	},
-	{
-		virtuals: {
-			available: {
-				get() {
-					return Number(this.amount) - Number(this.borrowedBy.length);
-				},
-			},
-		},
 	}
 );
 
